@@ -1,0 +1,20 @@
+version: "3"
+services:
+  web:
+    build: .
+    image: kewen123/cs3219-otot-c
+    depends_on:
+      - mongo
+    ports:
+      - "8081:8081"
+    environment:
+      - API_PORT=8081
+      - MONGO_URI=mongodb://mongo:27017
+      - JWT_SECRET=INSERT_YOUR_SECRET_KEY_HERE
+  mongo:
+    image: mongo:4.2.23-rc1
+    volumes:
+      - mongovolume:/data/db
+
+volumes:
+  mongovolume:
