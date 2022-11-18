@@ -5,6 +5,7 @@ const cors = require('cors');
 const User = require('./models/user');
 const jwt = require('jsonwebtoken');
 const auth = require('./middleware/auth');
+const authorizeUser = require('./middleware/authorization');
 require('dotenv').config();
 
 const app = express();
@@ -80,10 +81,7 @@ app.get('/home', auth, (req, res) => {
   return res.status(200).send(`Welcome back, ${req.user.username}!`);
 });
 
-app.get('/admin', auth, (req, res) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).send("You do not have permission to view this page!");
-  }
+app.get('/admin', auth, authorizeUser(["admin"]), (req, res) => {
   return res.status(200).send(`Hi ${req.user.username}, you are visiting an admin page!`);
 });
 
